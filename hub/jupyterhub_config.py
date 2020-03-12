@@ -3,6 +3,7 @@
 
 # Configuration file for JupyterHub
 import os
+from jupyterhub_traefik_proxy import TraefikTomlProxy
 
 c = get_config()
 
@@ -44,7 +45,8 @@ c.DockerSpawner.remove_containers = True
 c.DockerSpawner.debug = True
 
 # User containers will access hub by container name on the Docker network
-c.JupyterHub.hub_ip = 'jupyterhub'
+c.JupyterHub.hub_ip = '0.0.0.0'
+c.JupyterHub.hub_connect_ip = os.environ.get('HUB_DOMAIN')
 c.JupyterHub.hub_port = 8080
 
 # Authenticate users with GitHub OAuth
@@ -54,8 +56,17 @@ c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
 # Persist hub data on volume mounted inside container
 data_dir = os.environ.get('DATA_VOLUME_CONTAINER', '/data')
 
-c.JupyterHub.cookie_secret_file = os.path.join(data_dir,
-    'jupyterhub_cookie_secret')
+# Let servers live while the hub restarts
+c.JupyterHub.cleanup_servers = False
+
+c.TraefikTomlProxy.traefik_api_url = os.environ.get('TRAEFIK_API_URL')
+c.TraefikTomlProxy.traefik_api_username = os.environ.get('TRAEFIK_API_USERNAME')
+c.TraefikTomlProxy.traefik_api_password = os.environ.get('TRAEFIK_API_PASSWORD')
+c.TraefikTomlProxy.traefik_log_level = "INFO"
+c.TraefikTomlProxy.toml_dynamic_config_file = os.environ.get('TRAEFIK_JUPYTERHUB_TOML_FILE')
+c.JupyterHub.proxy_class = TraefikTomlProxy
+
+c.JupyterHub.cookie_secret_file = os.path.join(data_dir, 'jupyterhub_cookie_secret')
 
 c.JupyterHub.db_url = 'postgresql://{user}@{host}/{db}'.format(
     user=os.environ['POSTGRES_USER'],
