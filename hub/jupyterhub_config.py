@@ -59,6 +59,8 @@ data_dir = os.environ.get('DATA_VOLUME_CONTAINER', '/data')
 # Let servers live while the hub restarts
 c.JupyterHub.cleanup_servers = False
 
+# Configure Jupyterhub to manage proxy settings using the existing external Traefik API
+c.TraefikTomlProxy.should_start = False
 c.TraefikTomlProxy.traefik_api_url = os.environ.get('TRAEFIK_API_URL')
 c.TraefikTomlProxy.traefik_api_username = os.environ.get('TRAEFIK_API_USERNAME')
 c.TraefikTomlProxy.traefik_api_password = os.environ.get('TRAEFIK_API_PASSWORD')
