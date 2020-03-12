@@ -45,6 +45,7 @@ c.DockerSpawner.remove_containers = True
 c.DockerSpawner.debug = True
 
 # User containers will access hub by container name on the Docker network
+c.JupyterHub.bind_url = 'http://0.0.0.0:8080'
 c.JupyterHub.hub_ip = '0.0.0.0'
 c.JupyterHub.hub_connect_ip = os.environ.get('HUB_DOMAIN')
 c.JupyterHub.hub_port = 8080
@@ -59,14 +60,16 @@ data_dir = os.environ.get('DATA_VOLUME_CONTAINER', '/data')
 # Let servers live while the hub restarts
 c.JupyterHub.cleanup_servers = False
 
+c.ConfigurableHTTPProxy.should_start = False
+
 # Configure Jupyterhub to manage proxy settings using the existing external Traefik API
 c.TraefikTomlProxy.should_start = False
+c.JupyterHub.proxy_class = TraefikTomlProxy
 c.TraefikTomlProxy.traefik_api_url = os.environ.get('TRAEFIK_API_URL')
 c.TraefikTomlProxy.traefik_api_username = os.environ.get('TRAEFIK_API_USERNAME')
 c.TraefikTomlProxy.traefik_api_password = os.environ.get('TRAEFIK_API_PASSWORD')
 c.TraefikTomlProxy.traefik_log_level = "INFO"
 c.TraefikTomlProxy.toml_dynamic_config_file = os.environ.get('TRAEFIK_JUPYTERHUB_TOML_FILE') or '/srv/jupyterhub/traefik.jupyterhub.toml'
-c.JupyterHub.proxy_class = TraefikTomlProxy
 
 c.JupyterHub.cookie_secret_file = os.path.join(data_dir, 'jupyterhub_cookie_secret')
 
