@@ -12,3 +12,5 @@ RUN python3 -m pip install --no-cache-dir \
     jupyterhub-traefik-proxy==0.1.*
 
 # TODO volume mount point for pip dependencies?
+
+# TODO build this in my own drone server - it's much faster than docker hub

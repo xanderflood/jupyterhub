@@ -65,7 +65,7 @@ c.TraefikTomlProxy.traefik_api_url = os.environ.get('TRAEFIK_API_URL')
 c.TraefikTomlProxy.traefik_api_username = os.environ.get('TRAEFIK_API_USERNAME')
 c.TraefikTomlProxy.traefik_api_password = os.environ.get('TRAEFIK_API_PASSWORD')
 c.TraefikTomlProxy.traefik_log_level = "INFO"
-c.TraefikTomlProxy.toml_dynamic_config_file = os.environ.get('TRAEFIK_JUPYTERHUB_TOML_FILE')
+c.TraefikTomlProxy.toml_dynamic_config_file = os.environ.get('TRAEFIK_JUPYTERHUB_TOML_FILE') or '/srv/jupyterhub/traefik.jupyterhub.toml'
 c.JupyterHub.proxy_class = TraefikTomlProxy
 
 c.JupyterHub.cookie_secret_file = os.path.join(data_dir, 'jupyterhub_cookie_secret')
