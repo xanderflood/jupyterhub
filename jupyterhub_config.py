@@ -45,7 +45,9 @@ c.DockerSpawner.remove_containers = True
 c.DockerSpawner.debug = True
 
 # User containers will access hub by container name on the Docker network
+c.JupyterHub.url = 'http://0.0.0.0:8080'
 c.JupyterHub.bind_url = 'http://0.0.0.0:8080'
+c.JupyterHub.ip = '*'
 c.JupyterHub.hub_ip = '0.0.0.0'
 c.JupyterHub.hub_connect_ip = os.environ.get('HUB_DOMAIN')
 c.JupyterHub.hub_port = 8080
